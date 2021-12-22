@@ -1,0 +1,7 @@
+static/attachments/*
+static/profile_images/*
+static/reduced_profile_images/*
+
+!static/attachments/README.md
+!static/profile_images/README.md
+!static/reduced_profile_images/README.md

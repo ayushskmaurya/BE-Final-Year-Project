@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_chats">
+
+    <fragment
+        android:id="@+id/nav_chats"
+        android:name="com.messengerhelloworld.helloworld.ui.chats.ChatsFragment"
+        android:label="@string/menu_chats"
+        tools:layout="@layout/fragment_chats" />
+
+    <fragment
+        android:id="@+id/nav_contacts"
+        android:name="com.messengerhelloworld.helloworld.ui.contacts.ContactsFragment"
+        android:label="@string/menu_contacts"
+        tools:layout="@layout/fragment_contacts" />
+
+    <fragment
+        android:id="@+id/nav_about_helloworld"
+        android:name="com.messengerhelloworld.helloworld.ui.about_helloworld.AboutHelloworldFragment"
+        android:label="@string/menu_about_helloworld"
+        tools:layout="@layout/fragment_about_helloworld" />
+</navigation>

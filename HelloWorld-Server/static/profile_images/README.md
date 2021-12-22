@@ -1,0 +1,1 @@
+Profile Images of the users will be stored in this folder.

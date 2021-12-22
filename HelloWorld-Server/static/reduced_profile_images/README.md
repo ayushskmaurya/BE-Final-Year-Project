@@ -1,0 +1,1 @@
+Reduced profile images of the users will be stored in this folder.
