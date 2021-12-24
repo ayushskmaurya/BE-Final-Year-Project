@@ -2,6 +2,7 @@
 	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		include 'connection.php';
 
+		$whichFragment = $_POST['whichFragment'];
 		$user_id = $_POST['userid'];
 
 		$sql = "SELECT chats.chatid, users.name, users.profile_image, ";
@@ -15,6 +16,8 @@
 		$sql .= "ON chats.chatid = maxDateTime.chatid ";
 		$sql .= "LEFT JOIN messages ";
 		$sql .= "ON maxDateTime.chatid = messages.chatid AND maxDateTime.mDateTime = messages.dateTime ";
+		$sql .= "WHERE ";
+		$sql .= ($whichFragment === "chats") ? "chats.spammer=-1 OR chats.spammer=:user_id ": "chats.spammer=0 OR (chats.spammer<>-1 AND chats.spammer<>:user_id) ";
 		$sql .= "ORDER BY messages.dateTime DESC";
 
 		$stmt = $conn->prepare($sql);

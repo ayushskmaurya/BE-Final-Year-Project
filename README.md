@@ -43,6 +43,7 @@ Android Chat Application for Final Year Project.
 		chatid INT AUTO_INCREMENT,
 		user1id INT NOT NULL,
 		user2id INT NOT NULL,
+		spammer INT DEFAULT -1 NOT NULL,
 		PRIMARY KEY(chatid),
 		FOREIGN KEY (user1id) REFERENCES users(userid),
 		FOREIGN KEY (user2id) REFERENCES users(userid)
