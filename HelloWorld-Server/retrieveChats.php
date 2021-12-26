@@ -5,7 +5,7 @@
 		$whichFragment = $_POST['whichFragment'];
 		$user_id = $_POST['userid'];
 
-		$sql = "SELECT chats.chatid, users.name, users.profile_image, ";
+		$sql = "SELECT chats.chatid, users.userid, users.name, users.profile_image, ";
 		$sql .= "COALESCE(messages.message, '') AS message, ";
 		$sql .= "COALESCE(messages.dateTime, '') AS dateTime, ";
 		$sql .= "IF(messages.senderid<>:user_id AND messages.isMsgSeen=false, 1, 0) AS isNewMsg ";

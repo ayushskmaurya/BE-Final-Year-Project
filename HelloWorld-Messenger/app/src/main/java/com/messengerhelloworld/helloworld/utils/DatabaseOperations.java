@@ -230,4 +230,21 @@ public class DatabaseOperations {
 				}
 		);
 	}
+
+	// Stating user as spammer.
+	public void stateAsSpammer(HashMap<String, String> data, AfterStringResponseIsReceived afterStringResponseIsReceived) {
+		Volley.newRequestQueue(activity).add(
+				new StringRequest(
+						Request.Method.POST,
+						Base.getBaseUrl() + "/manageSpammer.php",
+						response -> afterStringResponseIsReceived.executeAfterResponse(response),
+						error -> afterStringResponseIsReceived.executeAfterErrorResponse(error.toString())
+				) {
+					@Override
+					protected Map<String, String> getParams() {
+						return data;
+					}
+				}
+		);
+	}
 }

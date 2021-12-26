@@ -5,6 +5,9 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
     <string name="name">Name</string>
     <string name="mob">Mobile Number</string>
     <string name="pwd">Password</string>
@@ -25,6 +28,7 @@
     <string name="menu_about_helloworld">About HelloWorld</string>
     <string name="menu_logout">Logout</string>
 
+    <string name="state_as_spammer">State as Spammer</string>
     <string name="user_profile_img">User Profile Image</string>
     <string name="no_chats_msg">No Chats to show!</string>
     <string name="no_chats_info">Tap the menu button to view Contacts and for more options.</string>

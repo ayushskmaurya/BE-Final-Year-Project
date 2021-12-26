@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.messengerhelloworld.helloworld.R;
 import com.messengerhelloworld.helloworld.activities.ChatActivity;
 import com.messengerhelloworld.helloworld.activities.ViewProfileImageActivity;
+import com.messengerhelloworld.helloworld.interfaces.ItemChatIsLongPressed;
 import com.messengerhelloworld.helloworld.utils.DisplayProfileImage;
+import com.messengerhelloworld.helloworld.utils.ChatItemLongPressedVars;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +30,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 	private static final String PROFILE_IMAGE_NAME = "com.messengerhelloworld.helloworld.profileImageName";
 	private final Context context;
 	private final JSONArray localDataSet;
+	private final ItemChatIsLongPressed itemChatIsLongPressed;
 	private Intent intentProfileImage;
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -63,9 +66,10 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 		}
 	}
 
-	public ChatsAdapter(Context context, JSONArray dataSet) {
+	public ChatsAdapter(Context context, JSONArray dataSet, ItemChatIsLongPressed itemChatIsLongPressed) {
 		this.context = context;
 		localDataSet = dataSet;
+		this.itemChatIsLongPressed = itemChatIsLongPressed;
 		intentProfileImage = new Intent(this.context, ViewProfileImageActivity.class);
 	}
 
@@ -89,10 +93,34 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 				Log.e(TAG, e.toString());
 			}
 		});
+
+		viewHolder.getUserChat().setOnLongClickListener(v -> {
+			if(ChatItemLongPressedVars.getChatId() == null) {
+				try {
+					ChatItemLongPressedVars.setAllVars(
+							localDataSet.getJSONObject(position).getString("chatid"),
+							viewHolder.getUserChat(), viewHolder.getLastMsg(),
+							localDataSet.getJSONObject(position).getString("isNewMsg")
+					);
+					itemChatIsLongPressed.whenItemPressed(localDataSet.getJSONObject(position).getString("userid"),
+							localDataSet.getJSONObject(position).getString("name"));
+				} catch (JSONException e) {
+					Log.e(TAG, e.toString());
+				}
+			}
+			return true;
+		});
+
 		try {
 			viewHolder.getUserName().setText(localDataSet.getJSONObject(position).getString("name"));
 
-			if(localDataSet.getJSONObject(position).getString("isNewMsg").equals("1")) {
+			if(localDataSet.getJSONObject(position).getString("chatid").equals(ChatItemLongPressedVars.getChatId())) {
+				viewHolder.getUserChat().setBackgroundColor(context.getResources().getColor(R.color.color3));
+				ChatItemLongPressedVars.setChatView(viewHolder.getUserChat());
+				ChatItemLongPressedVars.setLastMsg(viewHolder.getLastMsg());
+				ChatItemLongPressedVars.setIsNewMsg(localDataSet.getJSONObject(position).getString("isNewMsg"));
+			}
+			else if(localDataSet.getJSONObject(position).getString("isNewMsg").equals("1")) {
 				viewHolder.getUserChat().setBackgroundColor(context.getResources().getColor(R.color.grey3));
 				viewHolder.getLastMsg().setTextColor(context.getResources().getColor(R.color.black));
 				viewHolder.getLastMsg().setTextSize(16);

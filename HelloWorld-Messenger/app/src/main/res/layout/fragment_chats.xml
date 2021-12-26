@@ -1,26 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".ui.chats.ChatsFragment">
 
-    <ProgressBar
-        android:id="@+id/progressBar_fragmentChats"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:indeterminate="true"
-        android:indeterminateTintMode="src_atop"
-        android:indeterminateTint="@color/color1" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chats_fragmentChats"
+    <LinearLayout
+        android:id="@+id/chatsLayout_fragmentChats"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/toolbar_fragmentChats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:background="@color/color1"
+            android:padding="10dp"
+            android:visibility="gone">
+
+            <ImageButton
+                android:id="@+id/backButton_fragmentChats"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@color/color1"
+                android:contentDescription="@string/back_button"
+                android:src="@drawable/icon_back_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/stateAsSpammer_fragmentChats"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@color/color1"
+                android:contentDescription="@string/state_as_spammer"
+                android:src="@drawable/icon_spammer_add"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar_fragmentChats"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/color1"
+            android:indeterminateTintMode="src_atop" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chats_fragmentChats"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:visibility="gone" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/noChats_fragmentChats"

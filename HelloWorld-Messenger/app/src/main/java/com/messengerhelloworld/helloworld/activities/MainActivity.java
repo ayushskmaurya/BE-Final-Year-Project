@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sp;
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    private DrawerLayout drawer;
     private static final String TAG = "hwmLogMain";
     private static final String PROFILE_IMAGE_NAME = "com.messengerhelloworld.helloworld.profileImageName";
     private final DatabaseHandler databaseHandler = new DatabaseHandler(this, "helloworld", null, 1);
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             setContentView(binding.getRoot());
 
             setSupportActionBar(binding.appBarMain.toolbar);
-            DrawerLayout drawer = binding.drawerLayout;
+            drawer = binding.drawerLayout;
             NavigationView navigationView = binding.navView;
 
             mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -344,15 +345,19 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    // When row item in the main activity is long pressed
+    // then enable or disable navigation as required.
+    public void enableOrDisableNavigation(int lockMode, boolean shouldDisableNav) {
+        drawer.setDrawerLockMode(lockMode);
+        if(shouldDisableNav)
+            getSupportActionBar().hide();
+        else
+            getSupportActionBar().show();
     }
 }
