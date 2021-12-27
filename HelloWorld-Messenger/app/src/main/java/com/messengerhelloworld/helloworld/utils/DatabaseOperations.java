@@ -112,41 +112,66 @@ public class DatabaseOperations {
 	}
 
 	// Retrieving all the chats.
-	public void retrieveChats(HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
-		Volley.newRequestQueue(activity).add(
-				new StringRequest(
-						Request.Method.POST,
-						Base.getBaseUrl() + "/retrieveChats.php",
-						response -> {
-							try {
-								afterJsonArrayResponseIsReceived.executeAfterResponse(new JSONArray(response));
-							} catch (JSONException e) {
-								Log.e(TAG, e.toString());
+	public void retrieveChats(boolean shouldStoreNewArgs, HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
+		if(shouldStoreNewArgs) {
+			ShouldSync.setChatsPostData(data);
+			ShouldSync.setAfterJsonArrayResponseIsReceived(afterJsonArrayResponseIsReceived);
+		}
+		else {
+			Volley.newRequestQueue(activity).add(
+					new StringRequest(
+							Request.Method.POST,
+							Base.getBaseUrl() + "/retrieveChats.php",
+							response -> {
+								try {
+									afterJsonArrayResponseIsReceived.executeAfterResponse(new JSONArray(response));
+								} catch (JSONException e) {
+									Log.e(TAG, e.toString());
+								}
+								finally {
+									manageSyncOfChats(data, afterJsonArrayResponseIsReceived);
+								}
+							},
+							error -> {
+								afterJsonArrayResponseIsReceived.executeAfterErrorResponse(error.toString());
+								manageSyncOfChats(data, afterJsonArrayResponseIsReceived);
 							}
-							finally {
-								if(ShouldSync.getShouldSyncChats())
-									syncChats(data, afterJsonArrayResponseIsReceived);
-							}
-						},
-						error -> {
-							afterJsonArrayResponseIsReceived.executeAfterErrorResponse(error.toString());
-							if(ShouldSync.getShouldSyncChats())
-								syncChats(data, afterJsonArrayResponseIsReceived);
+					) {
+						@Override
+						protected Map<String, String> getParams() {
+							return data;
 						}
-				) {
-					@Override
-					protected Map<String, String> getParams() {
-						return data;
 					}
-				}
-		);
+			);
+		}
 	}
+
+	// Continuing or Restarting or Stopping to Sync chats.
+	private void manageSyncOfChats(HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
+		// Continuing...
+		if(ShouldSync.getShouldSyncChats())
+			syncChats(data, afterJsonArrayResponseIsReceived);
+
+		// Restarting...
+		else if(ShouldSync.getShouldRestartSync()) {
+			ShouldSync.setShouldRestartSync(false);
+			ShouldSync.setShouldSyncChats(true);
+			retrieveChats(false, ShouldSync.getChatsPostData(), ShouldSync.getAfterJsonArrayResponseIsReceived());
+			ShouldSync.setChatsPostData(null);
+			ShouldSync.setAfterJsonArrayResponseIsReceived(null);
+		}
+
+		// Stopping...
+		else
+			ShouldSync.setIsCurrentlySyncingChats(false);
+	}
+
 	// Synchronising all the chats.
 	private void syncChats(HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
 		handler1.postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				retrieveChats(data, afterJsonArrayResponseIsReceived);
+				retrieveChats(false, data, afterJsonArrayResponseIsReceived);
 			}
 		}, 3000);
 	}
@@ -204,6 +229,7 @@ public class DatabaseOperations {
 				}
 		);
 	}
+
 	// Synchronising messages.
 	private void syncMessages(HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
 		handler2.postDelayed(new Runnable() {

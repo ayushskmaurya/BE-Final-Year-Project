@@ -55,6 +55,7 @@ public class ChatsFragment extends Fragment {
 							 @Nullable Bundle savedInstanceState) {
 
 		View chatsLayout = inflater.inflate(R.layout.fragment_chats, container, false);
+		ShouldSync.setShouldSyncChats(false);
 
 		View toolbar = chatsLayout.findViewById(R.id.toolbar_fragmentChats);
 		ImageButton backButton = chatsLayout.findViewById(R.id.backButton_fragmentChats);
@@ -68,9 +69,17 @@ public class ChatsFragment extends Fragment {
 		data.put("whichFragment", "chats");
 		data.put("userid", sp.getString("HelloWorldUserId", null));
 
-		ShouldSync.setShouldSyncChats(true);
 		ChatItemLongPressedVars.setAllVarsAsNull();
-		databaseOperations.retrieveChats(data, new AfterJsonArrayResponseIsReceived() {
+
+		if(!ShouldSync.getIsCurrentlySyncingChats()) {
+			ShouldSync.setShouldSyncChats(true);
+			ShouldSync.setShouldRestartSync(false);
+			ShouldSync.setIsCurrentlySyncingChats(true);
+		}
+		else
+			ShouldSync.setShouldRestartSync(true);
+
+		databaseOperations.retrieveChats(ShouldSync.getShouldRestartSync(), data, new AfterJsonArrayResponseIsReceived() {
 			@Override
 			public void executeAfterResponse(JSONArray response) {
 				chatsProgressBar.setVisibility(View.GONE);
