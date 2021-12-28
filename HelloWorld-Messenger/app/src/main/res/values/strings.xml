@@ -54,6 +54,7 @@
     <string name="read_receipt_sent">Sent</string>
     <string name="read_receipt_seen">Seen</string>
     <string name="message">Message</string>
+    <string name="new_message">New Message</string>
     <string name="attach_file">Attach File</string>
     <string name="send_message">Send Message</string>
 

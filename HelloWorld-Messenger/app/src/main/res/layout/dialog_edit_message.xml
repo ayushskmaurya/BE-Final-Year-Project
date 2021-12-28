@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:padding="15dp">
+
+    <EditText
+        android:id="@+id/newMsg_dialogEditMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_input_fields"
+        android:ems="10"
+        android:hint="@string/new_message"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        android:minHeight="40dp"
+        android:maxLines="4"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black1"
+        android:textCursorDrawable="@drawable/cursor_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/no_dialogEditMessage"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="@color/grey1"
+        android:text="@string/no"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/yes_dialogEditMessage"
+        app:layout_constraintEnd_toStartOf="@+id/yes_dialogEditMessage" />
+
+    <Button
+        android:id="@+id/yes_dialogEditMessage"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="@string/yes"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newMsg_dialogEditMessage" />
+</androidx.constraintlayout.widget.ConstraintLayout>
