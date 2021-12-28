@@ -257,8 +257,8 @@ public class DatabaseOperations {
 		);
 	}
 
-	// Stating user as spammer.
-	public void stateAsSpammer(HashMap<String, String> data, AfterStringResponseIsReceived afterStringResponseIsReceived) {
+	// Stating or not stating user as spammer.
+	public void manageSpammer(HashMap<String, String> data, AfterStringResponseIsReceived afterStringResponseIsReceived) {
 		Volley.newRequestQueue(activity).add(
 				new StringRequest(
 						Request.Method.POST,

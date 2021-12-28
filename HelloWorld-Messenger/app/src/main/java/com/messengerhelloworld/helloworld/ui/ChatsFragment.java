@@ -1,4 +1,4 @@
-package com.messengerhelloworld.helloworld.ui.chats;
+package com.messengerhelloworld.helloworld.ui;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,6 +37,7 @@ import java.util.HashMap;
 public class ChatsFragment extends Fragment {
 	private static final String TAG = "hwmLogChats";
 	private Context context;
+	private String currentFragment;
 	private DatabaseOperations databaseOperations;
 	private ProgressBar chatsProgressBar;
 	private RecyclerView chatsRecyclerView;
@@ -57,16 +58,29 @@ public class ChatsFragment extends Fragment {
 		View chatsLayout = inflater.inflate(R.layout.fragment_chats, container, false);
 		ShouldSync.setShouldSyncChats(false);
 
+		SharedPreferences sp = getActivity().getSharedPreferences("HelloWorldSharedPref", Context.MODE_PRIVATE);
+		String whichFragment = sp.getString("whichFragment", null);
+		if(whichFragment != null && whichFragment.equals("spammers")) {
+			currentFragment = "spammers";
+			SharedPreferences.Editor ed = sp.edit();
+			ed.putString("whichFragment", null);
+			ed.apply();
+		}
+		else
+			currentFragment = "chats";
+
 		View toolbar = chatsLayout.findViewById(R.id.toolbar_fragmentChats);
 		ImageButton backButton = chatsLayout.findViewById(R.id.backButton_fragmentChats);
-		ImageButton stateAsSpammer = chatsLayout.findViewById(R.id.stateAsSpammer_fragmentChats);
+		ImageButton spammerButton = chatsLayout.findViewById(R.id.spammerButton_fragmentChats);
 		chatsProgressBar = chatsLayout.findViewById(R.id.progressBar_fragmentChats);
 		chatsRecyclerView = chatsLayout.findViewById(R.id.chats_fragmentChats);
 		noChats = chatsLayout.findViewById(R.id.noChats_fragmentChats);
 
-		SharedPreferences sp = getActivity().getSharedPreferences("HelloWorldSharedPref", Context.MODE_PRIVATE);
+		if(currentFragment.equals("spammers"))
+			spammerButton.setImageResource(R.drawable.icon_spammer_remove);
+
 		HashMap<String, String> data = new HashMap<>();
-		data.put("whichFragment", "chats");
+		data.put("whichFragment", currentFragment);
 		data.put("userid", sp.getString("HelloWorldUserId", null));
 
 		ChatItemLongPressedVars.setAllVarsAsNull();
@@ -102,28 +116,29 @@ public class ChatsFragment extends Fragment {
 							dialogSpammer.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 							dialogSpammer.setCancelable(false);
 
-							String message = "Do you want to state " + userName + " as Spammer?";
+							String message = currentFragment.equals("chats") ? "Do you" : "Do you not";
+							message += " want to state " + userName + " as Spammer?";
 							TextView msgView = dialogSpammer.findViewById(R.id.message_dialogSpammer);
 							msgView.setText(message);
 
-							stateAsSpammer.setOnClickListener(v1 -> {
+							spammerButton.setOnClickListener(v1 -> {
 								dialogSpammer.show();
-								Button cancelToState = dialogSpammer.findViewById(R.id.no_dialogSpammer);
-								Button state = dialogSpammer.findViewById(R.id.yes_dialogSpammer);
+								Button cancelButton = dialogSpammer.findViewById(R.id.no_dialogSpammer);
+								Button confirmButton = dialogSpammer.findViewById(R.id.yes_dialogSpammer);
 
-								cancelToState.setOnClickListener(v2 -> {
+								cancelButton.setOnClickListener(v2 -> {
 									afterTasksArePerformed(toolbar);
 									dialogSpammer.dismiss();
 								});
 
-								state.setOnClickListener(v2 -> {
+								confirmButton.setOnClickListener(v2 -> {
 									HashMap<String, String> postData = new HashMap<>();
-									postData.put("whatToDo", "stateAsSpammer");
+									postData.put("whatToDo", currentFragment.equals("chats") ? "stateAsSpammer" : "unstateAsSpammer");
 									postData.put("chatid", ChatItemLongPressedVars.getChatId());
 									postData.put("myuserid", sp.getString("HelloWorldUserId", null));
 									postData.put("userid", userId);
 
-									databaseOperations.stateAsSpammer(postData, new AfterStringResponseIsReceived() {
+									databaseOperations.manageSpammer(postData, new AfterStringResponseIsReceived() {
 										@Override
 										public void executeAfterResponse(String response) {
 											afterTasksArePerformed(toolbar);

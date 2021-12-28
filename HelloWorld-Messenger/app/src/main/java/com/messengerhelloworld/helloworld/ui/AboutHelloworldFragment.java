@@ -1,4 +1,4 @@
-package com.messengerhelloworld.helloworld.ui.about_helloworld;
+package com.messengerhelloworld.helloworld.ui;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

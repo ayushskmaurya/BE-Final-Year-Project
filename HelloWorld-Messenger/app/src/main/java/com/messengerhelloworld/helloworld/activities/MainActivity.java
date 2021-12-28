@@ -26,6 +26,8 @@ import com.google.android.material.navigation.NavigationView;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -35,6 +37,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.messengerhelloworld.helloworld.databinding.ActivityMainBinding;
 import com.messengerhelloworld.helloworld.R;
+import com.messengerhelloworld.helloworld.ui.ChatsFragment;
 import com.messengerhelloworld.helloworld.utils.Base;
 import com.messengerhelloworld.helloworld.utils.DatabaseHandler;
 import com.messengerhelloworld.helloworld.utils.DisplayProfileImage;
@@ -87,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             NavigationView navigationView = binding.navView;
 
             mAppBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.nav_chats, R.id.nav_contacts, R.id.nav_about_helloworld)
+                    R.id.nav_chats, R.id.nav_contacts, R.id.nav_spammers, R.id.nav_about_helloworld)
                     .setDrawerLayout(drawer)
                     .build();
             NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -359,5 +362,14 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         else
             getSupportActionBar().show();
+    }
+
+    // Replacing Spammers fragment with Chats fragment.
+    public void replaceFragmentSpammersToChats() {
+        ChatsFragment chatsFragment = new ChatsFragment();
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.nav_host_fragment_content_main, chatsFragment, "Chats");
+        transaction.commit();
     }
 }

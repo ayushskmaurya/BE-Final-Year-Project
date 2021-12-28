@@ -6,7 +6,8 @@ Android Chat Application for Final Year Project.
 * This application is created using Java for Android app and PHP, MySQL for the server.
 * Firebase Authentication is used to verify phone number.
 * User will be able to login simultaneously on multiple Android devices.
-* Since, all the files & chats of the user is stored in server, user do not have to worry about taking backups.
+* Since, all the attachments & chats of the user are stored in server, user do not have to worry about taking backups.
+* User can separate the spammers from normal chats i.e., Chats which are stated as Spammers by the user will not be populated along with the normal chats.
 
 #### Instructions
 1. Host the PHP and MySQL based HelloWorld Server.
