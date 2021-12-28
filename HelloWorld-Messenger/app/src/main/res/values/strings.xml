@@ -50,9 +50,7 @@
     <string name="attached_file">Attached File</string>
     <string name="cancel_uploading_file">Cancel Uploading File</string>
     <string name="download_file">Download File</string>
-    <string name="read_receipt_sending">Sending</string>
-    <string name="read_receipt_sent">Sent</string>
-    <string name="read_receipt_seen">Seen</string>
+    <string name="read_receipt">Read Receipt</string>
     <string name="message">Message</string>
     <string name="new_message">New Message</string>
     <string name="attach_file">Attach File</string>

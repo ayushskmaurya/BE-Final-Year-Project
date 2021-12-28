@@ -42,15 +42,13 @@ public class ChatAdapter extends RecyclerView.Adapter {
 	public static class SentViewHolder extends RecyclerView.ViewHolder {
 		private final TextView sentMsg;
 		private final TextView sentMsgTime;
-		private final ImageView readReceiptSent;
-		private final ImageView readReceiptSeen;
+		private final ImageView msgReadReceipt;
 
 		public SentViewHolder(View view) {
 			super(view);
 			sentMsg = view.findViewById(R.id.msg_rowItemMessageSent);
 			sentMsgTime = view.findViewById(R.id.time_rowItemMessageSent);
-			readReceiptSent = view.findViewById(R.id.readReceiptSent_rowItemMessageSent);
-			readReceiptSeen = view.findViewById(R.id.readReceiptSeen_rowItemMessageSent);
+			msgReadReceipt = view.findViewById(R.id.readReceipt_rowItemMessageSent);
 		}
 
 		public TextView getSentMsg() {
@@ -59,11 +57,8 @@ public class ChatAdapter extends RecyclerView.Adapter {
 		public TextView getSentMsgTime() {
 			return sentMsgTime;
 		}
-		public ImageView getReadReceiptSent() {
-			return readReceiptSent;
-		}
-		public ImageView getReadReceiptSeen() {
-			return readReceiptSeen;
+		public ImageView getMsgReadReceipt() {
+			return msgReadReceipt;
 		}
 	}
 
@@ -92,9 +87,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
 		private final ProgressBar progressBar;
 		private final ImageView cancelUpload;
 		private final ImageView downloadSentFile;
-		private final ImageView readReceiptFileSending;
-		private final ImageView readReceiptFileSent;
-		private final ImageView readReceiptFileSeen;
+		private final ImageView fileReadReceipt;
 
 		public SentFileViewHolder(View view) {
 			super(view);
@@ -104,9 +97,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
 			progressBar = view.findViewById(R.id.progressBar_rowItemAttachmentSent);
 			cancelUpload = view.findViewById(R.id.cancel_rowItemAttachmentSent);
 			downloadSentFile = view.findViewById(R.id.download_rowItemAttachmentSent);
-			readReceiptFileSending = view.findViewById(R.id.readReceiptSending_rowItemAttachmentSent);
-			readReceiptFileSent = view.findViewById(R.id.readReceiptSent_rowItemAttachmentSent);
-			readReceiptFileSeen = view.findViewById(R.id.readReceiptSeen_rowItemAttachmentSent);
+			fileReadReceipt = view.findViewById(R.id.readReceipt_rowItemAttachmentSent);
 		}
 
 		public TextView getSentFilename() {
@@ -127,14 +118,8 @@ public class ChatAdapter extends RecyclerView.Adapter {
 		public ImageView getDownloadSentFile() {
 			return downloadSentFile;
 		}
-		public ImageView getReadReceiptFileSending() {
-			return readReceiptFileSending;
-		}
-		public ImageView getReadReceiptFileSent() {
-			return readReceiptFileSent;
-		}
-		public ImageView getReadReceiptFileSeen() {
-			return readReceiptFileSeen;
+		public ImageView getFileReadReceipt() {
+			return fileReadReceipt;
 		}
 	}
 
@@ -245,14 +230,8 @@ public class ChatAdapter extends RecyclerView.Adapter {
 				vHolder.getSentMsg().setText(localDataSet.getJSONObject(position).getString("message"));
 				vHolder.getSentMsgTime().setText(localDataSet.getJSONObject(position).getString("dateTime").substring(11, 16));
 				readReceipt = localDataSet.getJSONObject(position).getString("isMsgSeen");
-				if(readReceipt.equals("1")) {
-					vHolder.getReadReceiptSent().setVisibility(View.GONE);
-					vHolder.getReadReceiptSeen().setVisibility(View.VISIBLE);
-				}
-				else if(readReceipt.equals("0")) {
-					vHolder.getReadReceiptSeen().setVisibility(View.GONE);
-					vHolder.getReadReceiptSent().setVisibility(View.VISIBLE);
-				}
+				if(readReceipt.equals("1"))
+					vHolder.getMsgReadReceipt().setImageResource(R.drawable.icon_read_receipt_seen);
 			} catch (JSONException e) {
 				Log.e(TAG, e.toString());
 			}
@@ -279,16 +258,10 @@ public class ChatAdapter extends RecyclerView.Adapter {
 					vHolder.getCancelUpload().setVisibility(View.GONE);
 					vHolder.getDownloadSentFile().setVisibility(View.VISIBLE);
 					readReceipt = localDataSet.getJSONObject(position).getString("isMsgSeen");
-					if(readReceipt.equals("1")) {
-						vHolder.getReadReceiptFileSending().setVisibility(View.GONE);
-						vHolder.getReadReceiptFileSent().setVisibility(View.GONE);
-						vHolder.getReadReceiptFileSeen().setVisibility(View.VISIBLE);
-					}
-					else if(readReceipt.equals("0")) {
-						vHolder.getReadReceiptFileSending().setVisibility(View.GONE);
-						vHolder.getReadReceiptFileSeen().setVisibility(View.GONE);
-						vHolder.getReadReceiptFileSent().setVisibility(View.VISIBLE);
-					}
+					if(readReceipt.equals("1"))
+						vHolder.getFileReadReceipt().setImageResource(R.drawable.icon_read_receipt_seen);
+					else if(readReceipt.equals("0"))
+						vHolder.getFileReadReceipt().setImageResource(R.drawable.icon_read_receipt_sent);
 
 					vHolder.getDownloadSentFile().setOnClickListener(v -> {
 						try {
@@ -305,9 +278,6 @@ public class ChatAdapter extends RecyclerView.Adapter {
 					vHolder.getDownloadSentFile().setVisibility(View.GONE);
 					vHolder.getProgressBar().setVisibility(View.VISIBLE);
 					vHolder.getCancelUpload().setVisibility(View.VISIBLE);
-					vHolder.getReadReceiptFileSent().setVisibility(View.GONE);
-					vHolder.getReadReceiptFileSeen().setVisibility(View.GONE);
-					vHolder.getReadReceiptFileSending().setVisibility(View.VISIBLE);
 
 					vHolder.getCancelUpload().setOnClickListener(v -> {
 						HashMap<String, String> data = new HashMap<>();

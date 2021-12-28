@@ -127,37 +127,14 @@
                     android:textSize="12sp" />
 
                 <ImageView
-                    android:id="@+id/readReceiptSending_rowItemAttachmentSent"
+                    android:id="@+id/readReceipt_rowItemAttachmentSent"
                     android:layout_width="18sp"
                     android:layout_height="18sp"
                     android:layout_gravity="bottom"
-                    android:contentDescription="@string/read_receipt_sending"
+                    android:contentDescription="@string/read_receipt"
                     android:paddingStart="1dp"
                     android:paddingEnd="5dp"
-                    android:visibility="gone"
                     app:srcCompat="@drawable/icon_read_receipt_sending" />
-
-                <ImageView
-                    android:id="@+id/readReceiptSent_rowItemAttachmentSent"
-                    android:layout_width="18sp"
-                    android:layout_height="18sp"
-                    android:layout_gravity="bottom"
-                    android:contentDescription="@string/read_receipt_sent"
-                    android:paddingStart="1dp"
-                    android:paddingEnd="5dp"
-                    android:visibility="gone"
-                    app:srcCompat="@drawable/icon_read_receipt_sent" />
-
-                <ImageView
-                    android:id="@+id/readReceiptSeen_rowItemAttachmentSent"
-                    android:layout_width="18sp"
-                    android:layout_height="18sp"
-                    android:layout_gravity="bottom"
-                    android:contentDescription="@string/read_receipt_seen"
-                    android:paddingStart="1dp"
-                    android:paddingEnd="5dp"
-                    android:visibility="gone"
-                    app:srcCompat="@drawable/icon_read_receipt_seen" />
             </LinearLayout>
         </LinearLayout>
 
