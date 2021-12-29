@@ -4,16 +4,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -23,6 +29,7 @@ import com.messengerhelloworld.helloworld.R;
 import com.messengerhelloworld.helloworld.adapters.ChatAdapter;
 import com.messengerhelloworld.helloworld.interfaces.AfterJsonArrayResponseIsReceived;
 import com.messengerhelloworld.helloworld.interfaces.AfterStringResponseIsReceived;
+import com.messengerhelloworld.helloworld.interfaces.ItemMsgIsLongPressed;
 import com.messengerhelloworld.helloworld.utils.DatabaseOperations;
 import com.messengerhelloworld.helloworld.utils.ShouldSync;
 
@@ -42,6 +49,11 @@ public class ChatActivity extends AppCompatActivity {
 	private String chatId, receiverId;
 	private String userMessages = null;
 	private HashMap<String, String> postData_retrieveMsgs;
+
+	private String itemLongPressedMsgId = null;
+	private String itemLongPressedMsg = null;
+	private View itemLongPressedMsgLayout = null;
+	private View itemLongPressedMsgBg = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +88,31 @@ public class ChatActivity extends AppCompatActivity {
 				chatRecyclerView.setVisibility(View.VISIBLE);
 				if(!String.valueOf(response).equals(userMessages)) {
 					chatRecyclerView.setLayoutManager(linearLayoutManager);
-					ChatAdapter chatAdapter = new ChatAdapter(response, senderId, ChatActivity.this);
+					ChatAdapter chatAdapter = new ChatAdapter(response, senderId, ChatActivity.this, new ItemMsgIsLongPressed() {
+
+						@Override
+						public void whenItemPressed(String msgId, String msg) {
+							itemLongPressedMsgId = msgId;
+							itemLongPressedMsg = msg;
+							invalidateOptionsMenu();
+						}
+
+						@Override
+						public void highlightBg(View msgLayout, View msgBg) {
+							itemLongPressedMsgLayout = msgLayout;
+							itemLongPressedMsgBg = msgBg;
+							itemLongPressedMsgLayout.setBackgroundColor(ContextCompat.getColor(
+									ChatActivity.this, R.color.color3));
+							itemLongPressedMsgBg.setBackgroundColor(ContextCompat.getColor(
+									ChatActivity.this, R.color.color3));
+						}
+
+						@Override
+						public String getItemLongPressedMsgId() {
+							return itemLongPressedMsgId;
+						}
+					});
+
 					chatRecyclerView.setAdapter(chatAdapter);
 					userMessages = String.valueOf(response);
 				}
@@ -139,11 +175,65 @@ public class ChatActivity extends AppCompatActivity {
 	}
 
 	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.activity_chat, menu);
+		MenuItem menuItemEditMsg = menu.findItem(R.id.editMsgButton_menuActivityChat);
+
+		if(itemLongPressedMsgId != null) {
+			menuItemEditMsg.setVisible(true);
+
+			Dialog dialogEditMsg = new Dialog(this);
+			dialogEditMsg.setContentView(R.layout.dialog_edit_message);
+			dialogEditMsg.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+			dialogEditMsg.setCancelable(false);
+
+			EditText newMessage = dialogEditMsg.findViewById(R.id.newMsg_dialogEditMessage);
+			newMessage.setText(itemLongPressedMsg);
+
+			menuItemEditMsg.setOnMenuItemClickListener(item -> {
+				dialogEditMsg.show();
+				Button cancelButton = dialogEditMsg.findViewById(R.id.no_dialogEditMessage);
+				Button confirmButton = dialogEditMsg.findViewById(R.id.yes_dialogEditMessage);
+
+				cancelButton.setOnClickListener(v -> {
+					whenBackButtonIsPressed();
+					dialogEditMsg.dismiss();
+				});
+
+				confirmButton.setOnClickListener(v -> {
+					HashMap<String, String> postData = new HashMap<>();
+					postData.put("table_name", "messages");
+					postData.put("columns", "message='" + newMessage.getText().toString() + "'");
+					postData.put("WHERE", "msgid=" + itemLongPressedMsgId + " AND isMsgSeen=0");
+
+					databaseOperations.update(postData, new AfterStringResponseIsReceived() {
+						@Override
+						public void executeAfterResponse(String response) {
+							whenBackButtonIsPressed();
+							dialogEditMsg.dismiss();
+						}
+
+						@Override
+						public void executeAfterErrorResponse(String error) {
+							Log.e(TAG, error);
+							whenBackButtonIsPressed();
+							dialogEditMsg.dismiss();
+						}
+					});
+				});
+				return true;
+			});
+		}
+		else
+			menuItemEditMsg.setVisible(false);
+		return true;
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home:
-				ShouldSync.setShouldSyncMessages(false);
-				NavUtils.navigateUpFromSameTask(this);
+				whenBackButtonIsPressed();
 				return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -151,7 +241,28 @@ public class ChatActivity extends AppCompatActivity {
 
 	@Override
 	public void onBackPressed() {
-		ShouldSync.setShouldSyncMessages(false);
-		NavUtils.navigateUpFromSameTask(this);
+		whenBackButtonIsPressed();
+	}
+
+	// Do the following when back button is pressed.
+	private void whenBackButtonIsPressed() {
+		// If message item isn't long pressed
+		if(itemLongPressedMsgId == null) {
+			ShouldSync.setShouldSyncMessages(false);
+			NavUtils.navigateUpFromSameTask(this);
+		}
+
+		// If message item was long pressed.
+		else {
+			itemLongPressedMsgId = null;
+			itemLongPressedMsg = null;
+			itemLongPressedMsgLayout.setBackgroundColor(ContextCompat.getColor(
+					ChatActivity.this, R.color.white));
+			itemLongPressedMsgBg.setBackgroundColor(ContextCompat.getColor(
+					ChatActivity.this, R.color.white));
+			itemLongPressedMsgLayout = null;
+			itemLongPressedMsgBg = null;
+			invalidateOptionsMenu();
+		}
 	}
 }

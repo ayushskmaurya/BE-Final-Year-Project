@@ -47,6 +47,7 @@
     <string name="about_info2">GitHub Repository Link:</string>
     <string name="about_info3">https://github.com/ayushskmaurya/BE-Final-Year-Project</string>
 
+    <string name="edit_message">Edit Message</string>
     <string name="attached_file">Attached File</string>
     <string name="cancel_uploading_file">Cancel Uploading File</string>
     <string name="download_file">Download File</string>

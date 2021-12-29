@@ -240,6 +240,23 @@ public class DatabaseOperations {
 		}, 1000);
 	}
 
+	// Updating record in the database table.
+	public void update(HashMap<String, String> data, AfterStringResponseIsReceived afterStringResponseIsReceived) {
+		Volley.newRequestQueue(activity).add(
+				new StringRequest(
+						Request.Method.POST,
+						Base.getBaseUrl() + "/update.php",
+						response -> afterStringResponseIsReceived.executeAfterResponse(response),
+						error -> afterStringResponseIsReceived.executeAfterErrorResponse(error.toString())
+				) {
+					@Override
+					protected Map<String, String> getParams() {
+						return data;
+					}
+				}
+		);
+	}
+
 	// Cancel Uploading Attachment.
 	public void cancelUploadingAttachment(HashMap<String, String> data, AfterStringResponseIsReceived afterStringResponseIsReceived) {
 		Volley.newRequestQueue(activity).add(

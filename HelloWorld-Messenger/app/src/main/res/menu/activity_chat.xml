@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/editMsgButton_menuActivityChat"
+        android:icon="@drawable/icon_edit_button"
+        android:orderInCategory="1"
+        android:title="@string/edit_message"
+        android:visible="false"
+        app:showAsAction="always" />
+</menu>

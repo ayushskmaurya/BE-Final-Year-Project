@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.messengerhelloworld.helloworld.R;
 import com.messengerhelloworld.helloworld.interfaces.AfterStringResponseIsReceived;
+import com.messengerhelloworld.helloworld.interfaces.ItemMsgIsLongPressed;
 import com.messengerhelloworld.helloworld.utils.Base;
 import com.messengerhelloworld.helloworld.utils.DatabaseHandler;
 import com.messengerhelloworld.helloworld.utils.DatabaseOperations;
@@ -35,22 +36,34 @@ public class ChatAdapter extends RecyclerView.Adapter {
 	private final JSONArray localDataSet;
 	private final String userid;
 	private final Activity activity;
+	private final ItemMsgIsLongPressed itemMsgIsLongPressed;
 	private DatabaseOperations databaseOperations;
 	private final DatabaseHandler databaseHandler;
+	private String itemLongPressedMsgId;
 	private String readReceipt;
 
 	public static class SentViewHolder extends RecyclerView.ViewHolder {
+		private final View sentMsgBg;
+		private final View sentMsgLayout;
 		private final TextView sentMsg;
 		private final TextView sentMsgTime;
 		private final ImageView msgReadReceipt;
 
 		public SentViewHolder(View view) {
 			super(view);
+			sentMsgBg = view.findViewById(R.id.bg_rowItemMessageSent);
+			sentMsgLayout = view.findViewById(R.id.msgLayout_rowItemMessageSent);
 			sentMsg = view.findViewById(R.id.msg_rowItemMessageSent);
 			sentMsgTime = view.findViewById(R.id.time_rowItemMessageSent);
 			msgReadReceipt = view.findViewById(R.id.readReceipt_rowItemMessageSent);
 		}
 
+		public View getSentMsgBg() {
+			return sentMsgBg;
+		}
+		public View getSentMsgLayout() {
+			return sentMsgLayout;
+		}
 		public TextView getSentMsg() {
 			return sentMsg;
 		}
@@ -157,10 +170,11 @@ public class ChatAdapter extends RecyclerView.Adapter {
 		}
 	}
 
-	public ChatAdapter(JSONArray dataSet, String userid, Activity activity) {
+	public ChatAdapter(JSONArray dataSet, String userid, Activity activity, ItemMsgIsLongPressed itemMsgIsLongPressed) {
 		localDataSet = dataSet;
 		this.userid = userid;
 		this.activity = activity;
+		this.itemMsgIsLongPressed = itemMsgIsLongPressed;
 		databaseOperations = new DatabaseOperations(this.activity);
 		databaseHandler = new DatabaseHandler(this.activity, "helloworld", null, 1);
 	}
@@ -232,9 +246,27 @@ public class ChatAdapter extends RecyclerView.Adapter {
 				readReceipt = localDataSet.getJSONObject(position).getString("isMsgSeen");
 				if(readReceipt.equals("1"))
 					vHolder.getMsgReadReceipt().setImageResource(R.drawable.icon_read_receipt_seen);
+
+				itemLongPressedMsgId = itemMsgIsLongPressed.getItemLongPressedMsgId();
+				if(itemLongPressedMsgId != null && itemLongPressedMsgId.equals(localDataSet.getJSONObject(position).getString("msgid")))
+					itemMsgIsLongPressed.highlightBg(vHolder.getSentMsgLayout(), vHolder.getSentMsgBg());
+
 			} catch (JSONException e) {
 				Log.e(TAG, e.toString());
 			}
+
+			vHolder.getSentMsgBg().setOnLongClickListener(v -> {
+				try {
+					if(itemMsgIsLongPressed.getItemLongPressedMsgId() == null && localDataSet.getJSONObject(position).getString("isMsgSeen").equals("0")) {
+						itemMsgIsLongPressed.whenItemPressed(localDataSet.getJSONObject(position).getString("msgid"),
+								localDataSet.getJSONObject(position).getString("message"));
+						itemMsgIsLongPressed.highlightBg(vHolder.getSentMsgLayout(), vHolder.getSentMsgBg());
+					}
+				} catch (JSONException e) {
+					Log.e(TAG, e.toString());
+				}
+				return true;
+			});
 		}
 
 		else if(viewHolder.getClass() == ReceivedViewHolder.class) {

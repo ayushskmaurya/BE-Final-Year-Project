@@ -8,6 +8,7 @@ Android Chat Application for Final Year Project.
 * User will be able to login simultaneously on multiple Android devices.
 * Since, all the attachments & chats of the user are stored in server, user do not have to worry about taking backups.
 * User can separate the spammers from normal chats i.e., Chats which are stated as Spammers by the user will not be populated along with the normal chats.
+* User can edit the sent message as long as the recipient has not seen it.
 
 #### Instructions
 1. Host the PHP and MySQL based HelloWorld Server.
