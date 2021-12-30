@@ -13,6 +13,10 @@
             android:icon="@drawable/menu_icon_contacts"
             android:title="@string/menu_contacts" />
         <item
+            android:id="@+id/nav_chat_without_internet"
+            android:icon="@drawable/menu_icon_chat_without_internet"
+            android:title="@string/menu_chat_without_internet" />
+        <item
             android:id="@+id/nav_spammers"
             android:icon="@drawable/menu_icon_spammers"
             android:title="@string/menu_spammers" />

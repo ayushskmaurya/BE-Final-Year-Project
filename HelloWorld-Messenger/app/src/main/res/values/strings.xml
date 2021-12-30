@@ -25,9 +25,14 @@
 
     <string name="menu_chats">Chats</string>
     <string name="menu_contacts">Contacts</string>
+    <string name="menu_chat_without_internet">Chat without Internet</string>
     <string name="menu_spammers">Spammers</string>
     <string name="menu_about_helloworld">About HelloWorld</string>
     <string name="menu_logout">Logout</string>
+
+    <string name="info_chat_without_internet">HelloWorld helps you to chat without the internet access.</string>
+    <string name="host">Host</string>
+    <string name="client">Client</string>
 
     <string name="spammer_button">Spammer Button</string>
     <string name="user_profile_img">User Profile Image</string>
@@ -42,7 +47,9 @@
         3. This application is created using Java for Android app and PHP, MySQL for the server.\n
         4. Firebase Authentication is used to verify phone number.\n
         5. User will be able to login simultaneously on multiple Android devices.\n
-        6. Since, all the files &amp; chats of the user is stored in server, user do not have to worry about taking backups.
+        6. Since, all the attachments &amp; chats of the user are stored in server, user do not have to worry about taking backups.\n
+        7. User can separate the spammers from normal chats i.e., Chats which are stated as Spammers by the user will not be populated along with the normal chats.\n
+        8. User can edit the sent message as long as the recipient has not seen it.
     </string>
     <string name="about_info2">GitHub Repository Link:</string>
     <string name="about_info3">https://github.com/ayushskmaurya/BE-Final-Year-Project</string>

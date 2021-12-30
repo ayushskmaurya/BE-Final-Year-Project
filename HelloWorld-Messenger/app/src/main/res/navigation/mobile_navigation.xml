@@ -18,6 +18,12 @@
         tools:layout="@layout/fragment_contacts" />
 
     <fragment
+        android:id="@+id/nav_chat_without_internet"
+        android:name="com.messengerhelloworld.helloworld.ui.ChatWithoutInternetFragment"
+        android:label="@string/menu_chat_without_internet"
+        tools:layout="@layout/fragment_chat_without_internet" />
+
+    <fragment
         android:id="@+id/nav_spammers"
         android:name="com.messengerhelloworld.helloworld.ui.SpammersFragment"
         android:label="@string/menu_spammers"
