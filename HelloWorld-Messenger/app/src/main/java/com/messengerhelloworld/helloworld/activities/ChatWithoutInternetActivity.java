@@ -11,7 +11,9 @@ import com.messengerhelloworld.helloworld.R;
 
 public class ChatWithoutInternetActivity extends AppCompatActivity {
 	private static final String IS_HOST_OR_CLIENT = "com.messengerhelloworld.helloworld.isHostOrClient";
+	private static final String IP_ADDRESS = "com.messengerhelloworld.helloworld.ipAddress";
 	private String who;
+	private String ipAddress;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -20,8 +22,10 @@ public class ChatWithoutInternetActivity extends AppCompatActivity {
 
 		Intent intent = getIntent();
 		who = intent.getStringExtra(IS_HOST_OR_CLIENT);
+		ipAddress = intent.getStringExtra(IP_ADDRESS);
 
 		Log.d("hwmLog", who);
+		Log.d("hwmLog", ipAddress);
 	}
 
 	@Override

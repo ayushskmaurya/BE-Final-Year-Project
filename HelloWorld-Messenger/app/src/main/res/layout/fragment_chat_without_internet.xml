@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:padding="10dp"
     tools:context=".ui.ChatWithoutInternetFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginTop="-45dp"
+        android:layout_marginTop="-20dp"
         android:background="@color/white">
 
         <ImageView
@@ -39,47 +40,60 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="-15dp"
             android:gravity="center"
-            android:padding="10dp"
             android:text="@string/info_chat_without_internet"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/logo_fragmentChatWithoutInternet" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/white"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/hostButton_fragmentChatWithoutInternet"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/ip_fragmentChatWithoutInternet"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/grey1"
-            android:text="@string/host"
-            android:textAllCaps="false"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_input_fields"
+            android:ems="10"
+            android:hint="@string/ip_address"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:padding="7dp"
             android:textColor="@color/black"
+            android:textColorHint="@color/black1"
+            android:textCursorDrawable="@drawable/cursor_color"
             android:textSize="18sp"
-            style="?android:attr/buttonBarButtonStyle" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/info_fragmentChatWithoutInternet" />
 
         <Button
             android:id="@+id/clientButton_fragmentChatWithoutInternet"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
+            android:layout_marginTop="5dp"
             android:backgroundTint="@color/color1"
-            android:text="@string/client"
+            android:padding="7dp"
+            android:text="@string/join_as_client"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="18sp"
-            style="?android:attr/buttonBarButtonStyle" />
-    </LinearLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ip_fragmentChatWithoutInternet" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/hostButton_fragmentChatWithoutInternet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:backgroundTint="@color/grey1"
+        android:padding="7dp"
+        android:text="@string/host"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
 
 </FrameLayout>

@@ -31,8 +31,9 @@
     <string name="menu_logout">Logout</string>
 
     <string name="info_chat_without_internet">HelloWorld helps you to chat without the internet access.</string>
+    <string name="ip_address">IP Address</string>
+    <string name="join_as_client">Join as Client</string>
     <string name="host">Host</string>
-    <string name="client">Client</string>
 
     <string name="spammer_button">Spammer Button</string>
     <string name="user_profile_img">User Profile Image</string>
