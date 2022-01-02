@@ -34,9 +34,9 @@ public class ChatWithoutInternetFragment extends Fragment {
 		Button host = chatWithoutInternetLayout.findViewById(R.id.hostButton_fragmentChatWithoutInternet);
 
 		client.setOnClickListener(v -> {
-			Intent intent = new Intent(getActivity(), ChatWithoutInternetActivity.class);
 			String ipAddress = ipAddressView.getText().toString().trim();
 			if(ipAddress.length() > 0) {
+				Intent intent = new Intent(getActivity(), ChatWithoutInternetActivity.class);
 				intent.putExtra(IS_HOST_OR_CLIENT, "client");
 				intent.putExtra(IP_ADDRESS, ipAddress);
 				getActivity().startActivity(intent);
@@ -48,7 +48,6 @@ public class ChatWithoutInternetFragment extends Fragment {
 		host.setOnClickListener(v -> {
 			Intent intent = new Intent(getActivity(), ChatWithoutInternetActivity.class);
 			intent.putExtra(IS_HOST_OR_CLIENT, "host");
-			intent.putExtra(IP_ADDRESS, "null");
 			getActivity().startActivity(intent);
 		});
 

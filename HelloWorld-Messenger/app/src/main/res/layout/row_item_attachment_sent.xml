@@ -122,17 +122,17 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:paddingStart="2dp"
-                    android:paddingEnd="1dp"
+                    android:paddingEnd="5dp"
                     android:textColor="@color/grey4"
                     android:textSize="12sp" />
 
                 <ImageView
                     android:id="@+id/readReceipt_rowItemAttachmentSent"
-                    android:layout_width="18sp"
-                    android:layout_height="18sp"
+                    android:layout_width="20sp"
+                    android:layout_height="20sp"
                     android:layout_gravity="bottom"
                     android:contentDescription="@string/read_receipt"
-                    android:paddingStart="1dp"
+                    android:paddingStart="0dp"
                     android:paddingEnd="5dp"
                     app:srcCompat="@drawable/icon_read_receipt_sending" />
             </LinearLayout>
