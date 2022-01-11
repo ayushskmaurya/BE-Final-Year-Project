@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                         permissions.toArray(new String[permissions.size()]), 1);
 
             // Creating all the required folders.
-            ManageFolders.createFoldersForProfileImages();
+            ManageFolders.createAllFolders();
 
             // Deleting stored profile images frequently.
             databaseHandler.insertLastDeletedProfileImagesDateTime(

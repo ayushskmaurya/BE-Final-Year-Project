@@ -7,6 +7,7 @@ Android Chat Application for Final Year Project.
 * Firebase Authentication is used to verify phone number.
 * User will be able to login simultaneously on multiple Android devices.
 * Since, all the attachments & chats of the user are stored in server, user do not have to worry about taking backups.
+* User can chat as well as can share large sized files with each other without the internet connectivity & data charges.
 * User can separate the spammers from normal chats i.e., Chats which are stated as Spammers by the user will not be populated along with the normal chats.
 * User can edit the sent message as long as the recipient has not seen it.
 
