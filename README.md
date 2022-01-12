@@ -44,8 +44,8 @@ Android Chat Application for Final Year Project.
 	-- Chats Table
 	CREATE TABLE chats (
 		chatid INT AUTO_INCREMENT,
-		user1id INT NOT NULL,
-		user2id INT NOT NULL,
+		user1id INT,
+		user2id INT,
 		spammer INT DEFAULT -1 NOT NULL,
 		PRIMARY KEY(chatid),
 		FOREIGN KEY (user1id) REFERENCES users(userid),
@@ -53,6 +53,30 @@ Android Chat Application for Final Year Project.
 	);
 	```
 	
+	```
+	-- Groups Table
+	CREATE TABLE groups (
+		groupid INT AUTO_INCREMENT,
+		chatid INT NOT NULL,
+		name VARCHAR(100) NOT NULL,
+		PRIMARY KEY(groupid),
+		FOREIGN KEY (chatid) REFERENCES chats(chatid)
+	);
+	```
+
+	```
+	-- Group Members Table
+	CREATE TABLE group_members (
+		memberid INT AUTO_INCREMENT,
+		chatid INT NOT NULL,
+		userid INT NOT NULL,
+		lastRetrievalDateTime DATETIME(3) DEFAULT CURRENT_TIMESTAMP NOT NULL,
+		PRIMARY KEY(memberid),
+		FOREIGN KEY (chatid) REFERENCES chats(chatid),
+		FOREIGN KEY (userid) REFERENCES users(userid)
+	);
+	```
+
 	```
 	-- Messages Table
 	CREATE TABLE messages (
