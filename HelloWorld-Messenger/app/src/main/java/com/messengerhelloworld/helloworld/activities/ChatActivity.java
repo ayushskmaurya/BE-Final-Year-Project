@@ -91,7 +91,7 @@ public class ChatActivity extends AppCompatActivity {
 				chatRecyclerView.setVisibility(View.VISIBLE);
 				if(!String.valueOf(response).equals(userMessages)) {
 					chatRecyclerView.setLayoutManager(linearLayoutManager);
-					ChatAdapter chatAdapter = new ChatAdapter(response, senderId, ChatActivity.this, new ItemMsgIsLongPressed() {
+					ChatAdapter chatAdapter = new ChatAdapter(response, senderId, isGroup, ChatActivity.this, new ItemMsgIsLongPressed() {
 
 						@Override
 						public void whenItemPressed(String msgId, String msg) {

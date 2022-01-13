@@ -35,6 +35,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
 	private static final String TAG = "hwmLogChatAdapter";
 	private final JSONArray localDataSet;
 	private final String userid;
+	private final String isGroup;
 	private final Activity activity;
 	private final ItemMsgIsLongPressed itemMsgIsLongPressed;
 	private DatabaseOperations databaseOperations;
@@ -76,15 +77,20 @@ public class ChatAdapter extends RecyclerView.Adapter {
 	}
 
 	public static class ReceivedViewHolder extends RecyclerView.ViewHolder {
+		private final TextView msgSenderName;
 		private final TextView receivedMsg;
 		private final TextView receivedMsgTime;
 
 		public ReceivedViewHolder(View view) {
 			super(view);
+			msgSenderName = view.findViewById(R.id.sendername_rowItemMessageReceived);
 			receivedMsg = view.findViewById(R.id.msg_rowItemMessageReceived);
 			receivedMsgTime = view.findViewById(R.id.time_rowItemMessageReceived);
 		}
 
+		public TextView getMsgSenderName() {
+			return msgSenderName;
+		}
 		public TextView getReceivedMsg() {
 			return receivedMsg;
 		}
@@ -137,6 +143,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
 	}
 
 	public static class ReceivedFileViewHolder extends RecyclerView.ViewHolder {
+		private final TextView fileSenderName;
 		private final TextView receivedFilename;
 		private final TextView receivedCaption;
 		private final TextView receivedCaptionTime;
@@ -144,12 +151,16 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
 		public ReceivedFileViewHolder(View view) {
 			super(view);
+			fileSenderName = view.findViewById(R.id.senderName_rowItemAttachmentReceived);
 			receivedFilename = view.findViewById(R.id.filename_rowItemAttachmentReceived);
 			receivedCaption = view.findViewById(R.id.caption_rowItemAttachmentReceived);
 			receivedCaptionTime = view.findViewById(R.id.time_rowItemAttachmentReceived);
 			downloadReceivedFile = view.findViewById(R.id.download_rowItemAttachmentReceived);
 		}
 
+		public TextView getFileSenderName() {
+			return fileSenderName;
+		}
 		public TextView getReceivedFilename() {
 			return receivedFilename;
 		}
@@ -170,9 +181,10 @@ public class ChatAdapter extends RecyclerView.Adapter {
 		}
 	}
 
-	public ChatAdapter(JSONArray dataSet, String userid, Activity activity, ItemMsgIsLongPressed itemMsgIsLongPressed) {
+	public ChatAdapter(JSONArray dataSet, String userid, String isGroup, Activity activity, ItemMsgIsLongPressed itemMsgIsLongPressed) {
 		localDataSet = dataSet;
 		this.userid = userid;
+		this.isGroup = isGroup;
 		this.activity = activity;
 		this.itemMsgIsLongPressed = itemMsgIsLongPressed;
 		databaseOperations = new DatabaseOperations(this.activity);
@@ -243,9 +255,13 @@ public class ChatAdapter extends RecyclerView.Adapter {
 			try {
 				vHolder.getSentMsg().setText(localDataSet.getJSONObject(position).getString("message"));
 				vHolder.getSentMsgTime().setText(localDataSet.getJSONObject(position).getString("dateTime").substring(11, 16));
-				readReceipt = localDataSet.getJSONObject(position).getString("isMsgSeen");
-				if(readReceipt.equals("1"))
-					vHolder.getMsgReadReceipt().setImageResource(R.drawable.icon_read_receipt_seen);
+				if(isGroup.equals("no")) {
+					readReceipt = localDataSet.getJSONObject(position).getString("isMsgSeen");
+					if (readReceipt.equals("1"))
+						vHolder.getMsgReadReceipt().setImageResource(R.drawable.icon_read_receipt_seen);
+				}
+				else
+					vHolder.getMsgReadReceipt().setVisibility(View.GONE);
 
 				itemLongPressedMsgId = itemMsgIsLongPressed.getItemLongPressedMsgId();
 				if(itemLongPressedMsgId != null && itemLongPressedMsgId.equals(localDataSet.getJSONObject(position).getString("msgid")))
@@ -257,7 +273,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
 			vHolder.getSentMsgBg().setOnLongClickListener(v -> {
 				try {
-					if(itemMsgIsLongPressed.getItemLongPressedMsgId() == null && localDataSet.getJSONObject(position).getString("isMsgSeen").equals("0")) {
+					if(isGroup.equals("no") && itemMsgIsLongPressed.getItemLongPressedMsgId() == null && localDataSet.getJSONObject(position).getString("isMsgSeen").equals("0")) {
 						itemMsgIsLongPressed.whenItemPressed(localDataSet.getJSONObject(position).getString("msgid"),
 								localDataSet.getJSONObject(position).getString("message"));
 						itemMsgIsLongPressed.highlightBg(vHolder.getSentMsgLayout(), vHolder.getSentMsgBg());
@@ -272,6 +288,10 @@ public class ChatAdapter extends RecyclerView.Adapter {
 		else if(viewHolder.getClass() == ReceivedViewHolder.class) {
 			ReceivedViewHolder vHolder = (ReceivedViewHolder) viewHolder;
 			try {
+				if(isGroup.equals("yes")) {
+					vHolder.getMsgSenderName().setText(localDataSet.getJSONObject(position).getString("sendername"));
+					vHolder.getMsgSenderName().setVisibility(View.VISIBLE);
+				}
 				vHolder.getReceivedMsg().setText(localDataSet.getJSONObject(position).getString("message"));
 				vHolder.getReceivedMsgTime().setText(localDataSet.getJSONObject(position).getString("dateTime").substring(11, 16));
 			} catch (JSONException e) {
@@ -289,11 +309,15 @@ public class ChatAdapter extends RecyclerView.Adapter {
 					vHolder.getProgressBar().setVisibility(View.GONE);
 					vHolder.getCancelUpload().setVisibility(View.GONE);
 					vHolder.getDownloadSentFile().setVisibility(View.VISIBLE);
-					readReceipt = localDataSet.getJSONObject(position).getString("isMsgSeen");
-					if(readReceipt.equals("1"))
-						vHolder.getFileReadReceipt().setImageResource(R.drawable.icon_read_receipt_seen);
-					else if(readReceipt.equals("0"))
-						vHolder.getFileReadReceipt().setImageResource(R.drawable.icon_read_receipt_sent);
+					if(isGroup.equals("no")) {
+						readReceipt = localDataSet.getJSONObject(position).getString("isMsgSeen");
+						if(readReceipt.equals("1"))
+							vHolder.getFileReadReceipt().setImageResource(R.drawable.icon_read_receipt_seen);
+						else if(readReceipt.equals("0"))
+							vHolder.getFileReadReceipt().setImageResource(R.drawable.icon_read_receipt_sent);
+					}
+					else
+						vHolder.getFileReadReceipt().setVisibility(View.GONE);
 
 					vHolder.getDownloadSentFile().setOnClickListener(v -> {
 						try {
@@ -342,6 +366,10 @@ public class ChatAdapter extends RecyclerView.Adapter {
 		else if(viewHolder.getClass() == ReceivedFileViewHolder.class) {
 			ReceivedFileViewHolder vHolder = (ReceivedFileViewHolder) viewHolder;
 			try {
+				if(isGroup.equals("yes")) {
+					vHolder.getFileSenderName().setText(localDataSet.getJSONObject(position).getString("sendername"));
+					vHolder.getFileSenderName().setVisibility(View.VISIBLE);
+				}
 				vHolder.getReceivedFilename().setText(localDataSet.getJSONObject(position).getString("filename"));
 				vHolder.getReceivedCaption().setText(localDataSet.getJSONObject(position).getString("message"));
 				vHolder.getReceivedCaptionTime().setText(localDataSet.getJSONObject(position).getString("dateTime").substring(11, 16));
