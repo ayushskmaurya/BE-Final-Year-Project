@@ -22,6 +22,7 @@ import org.json.JSONException;
 
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder> {
 	private static final String TAG = "hwmLogContactsAdapter";
+	private static final String IS_GROUP = "com.messengerhelloworld.helloworld.isGroup";
 	private static final String CHAT_ID = "com.messengerhelloworld.helloworld.chatId";
 	private static final String RECEIVER_USER_NAME = "com.messengerhelloworld.helloworld.receiverUserName";
 	private static final String RECEIVER_USER_ID = "com.messengerhelloworld.helloworld.receiverUserId";
@@ -71,6 +72,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 		viewHolder.getContact().setOnClickListener(v -> {
 			try {
 				Intent intent = new Intent(context, ChatActivity.class);
+				intent.putExtra(IS_GROUP, "no");
 				intent.putExtra(CHAT_ID, localDataSet.getJSONObject(position).getString("chatid"));
 				intent.putExtra(RECEIVER_USER_NAME, localDataSet.getJSONObject(position).getString("name"));
 				intent.putExtra(RECEIVER_USER_ID, localDataSet.getJSONObject(position).getString("userid"));

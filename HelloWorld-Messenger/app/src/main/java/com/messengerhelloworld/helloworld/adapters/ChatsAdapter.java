@@ -24,6 +24,7 @@ import org.json.JSONException;
 
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
 	private static final String TAG = "hwmLogChatsAdapter";
+	private static final String IS_GROUP = "com.messengerhelloworld.helloworld.isGroup";
 	private static final String CHAT_ID = "com.messengerhelloworld.helloworld.chatId";
 	private static final String RECEIVER_USER_NAME = "com.messengerhelloworld.helloworld.receiverUserName";
 	private static final String RECEIVER_USER_ID = "com.messengerhelloworld.helloworld.receiverUserId";
@@ -85,6 +86,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 		viewHolder.getUserChat().setOnClickListener(v -> {
 			try {
 				Intent intent = new Intent(context, ChatActivity.class);
+				intent.putExtra(IS_GROUP, localDataSet.getJSONObject(position).getString("isGroup"));
 				intent.putExtra(CHAT_ID, localDataSet.getJSONObject(position).getString("chatid"));
 				intent.putExtra(RECEIVER_USER_NAME, localDataSet.getJSONObject(position).getString("name"));
 				intent.putExtra(RECEIVER_USER_ID, "null");
@@ -95,8 +97,8 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 		});
 
 		viewHolder.getUserChat().setOnLongClickListener(v -> {
-			if(ChatItemLongPressedVars.getChatId() == null) {
-				try {
+			try {
+				if(localDataSet.getJSONObject(position).getString("isGroup").equals("no") && ChatItemLongPressedVars.getChatId() == null) {
 					ChatItemLongPressedVars.setAllVars(
 							localDataSet.getJSONObject(position).getString("chatid"),
 							viewHolder.getUserChat(), viewHolder.getLastMsg(),
@@ -104,9 +106,9 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 					);
 					itemChatIsLongPressed.whenItemPressed(localDataSet.getJSONObject(position).getString("userid"),
 							localDataSet.getJSONObject(position).getString("name"));
-				} catch (JSONException e) {
-					Log.e(TAG, e.toString());
 				}
+			} catch (JSONException e) {
+				Log.e(TAG, e.toString());
 			}
 			return true;
 		});
@@ -141,6 +143,8 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> 
 					context.startActivity(intentProfileImage);
 				});
 			}
+			else if(localDataSet.getJSONObject(position).getString("isGroup").equals("yes"))
+				viewHolder.getProfileImg().setImageResource(R.drawable.icon_default_group_profile_img);
 
 		} catch (JSONException e) {
 			Log.e(TAG, e.toString());

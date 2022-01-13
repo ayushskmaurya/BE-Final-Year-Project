@@ -19,22 +19,28 @@
 		$sql .= "LEFT JOIN messages ";
 		$sql .= "ON maxDateTime.chatid = messages.chatid AND maxDateTime.mDateTime = messages.dateTime ";
 		$sql .= "WHERE ";
-		$sql .= ($whichFragment === "chats") ? "chats.spammer=-1 OR chats.spammer=:user_id ": "chats.spammer=0 OR (chats.spammer<>-1 AND chats.spammer<>:user_id) ";
+
+		if($whichFragment === "chats") {
+			$sql .= "chats.spammer=-1 OR chats.spammer=:user_id ";
 		
-		// Query to retrieve groups.
-		$sql .= "UNION ";
-		$sql .= "SELECT groups.chatid, '' AS userid, groups.name, null AS profile_image, ";
-		$sql .= "COALESCE(messages.message, '') AS message, ";
-		$sql .= "COALESCE(messages.dateTime, '') AS dateTime, ";
-		$sql .= "IF(group_members.lastRetrievalDateTime < messages.dateTime, 1, 0) AS isNewMsg, ";
-		$sql .= "'yes' AS isGroup ";
-		$sql .= "FROM group_members ";
-		$sql .= "INNER JOIN groups ";
-		$sql .= "ON group_members.userid=:user_id AND group_members.chatid=groups.chatid ";
-		$sql .= "LEFT JOIN (SELECT chatid, max(dateTime) AS mDateTime FROM messages GROUP BY chatid) AS maxDateTime ";
-		$sql .= "ON groups.chatid = maxDateTime.chatid ";
-		$sql .= "LEFT JOIN messages ";
-		$sql .= "ON maxDateTime.chatid = messages.chatid AND maxDateTime.mDateTime = messages.dateTime ";
+			// Query to retrieve groups.
+			$sql .= "UNION ";
+			$sql .= "SELECT groups.chatid, '' AS userid, groups.name, null AS profile_image, ";
+			$sql .= "COALESCE(messages.message, '') AS message, ";
+			$sql .= "COALESCE(messages.dateTime, '') AS dateTime, ";
+			$sql .= "IF(group_members.lastRetrievalDateTime < messages.dateTime, 1, 0) AS isNewMsg, ";
+			$sql .= "'yes' AS isGroup ";
+			$sql .= "FROM group_members ";
+			$sql .= "INNER JOIN groups ";
+			$sql .= "ON group_members.userid=:user_id AND group_members.chatid=groups.chatid ";
+			$sql .= "LEFT JOIN (SELECT chatid, max(dateTime) AS mDateTime FROM messages GROUP BY chatid) AS maxDateTime ";
+			$sql .= "ON groups.chatid = maxDateTime.chatid ";
+			$sql .= "LEFT JOIN messages ";
+			$sql .= "ON maxDateTime.chatid = messages.chatid AND maxDateTime.mDateTime = messages.dateTime ";
+		}
+
+		else
+			$sql .= "chats.spammer=0 OR (chats.spammer<>-1 AND chats.spammer<>:user_id) ";
 		
 		$sql .= "ORDER BY dateTime DESC";
 

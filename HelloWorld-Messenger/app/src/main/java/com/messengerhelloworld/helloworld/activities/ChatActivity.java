@@ -39,6 +39,7 @@ import java.util.HashMap;
 
 public class ChatActivity extends AppCompatActivity {
 	private static final String TAG = "hwmLogChat";
+	private static final String IS_GROUP = "com.messengerhelloworld.helloworld.isGroup";
 	private static final String CHAT_ID = "com.messengerhelloworld.helloworld.chatId";
 	private static final String RECEIVER_USER_NAME = "com.messengerhelloworld.helloworld.receiverUserName";
 	private static final String RECEIVER_USER_ID = "com.messengerhelloworld.helloworld.receiverUserId";
@@ -62,6 +63,7 @@ public class ChatActivity extends AppCompatActivity {
 		ShouldSync.setShouldSyncChats(false);
 
 		Intent intent = getIntent();
+		String isGroup = intent.getStringExtra(IS_GROUP);
 		chatId = intent.getStringExtra(CHAT_ID);
 		String receiverUserName = intent.getStringExtra(RECEIVER_USER_NAME);
 		receiverId = intent.getStringExtra(RECEIVER_USER_ID);
@@ -77,6 +79,7 @@ public class ChatActivity extends AppCompatActivity {
 		linearLayoutManager.setStackFromEnd(true);
 
 		postData_retrieveMsgs = new HashMap<>();
+		postData_retrieveMsgs.put("isGroup", isGroup);
 		postData_retrieveMsgs.put("chatid", chatId);
 		postData_retrieveMsgs.put("userid", senderId);
 
