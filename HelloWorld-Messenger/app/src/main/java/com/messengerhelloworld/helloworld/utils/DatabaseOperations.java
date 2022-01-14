@@ -199,6 +199,29 @@ public class DatabaseOperations {
 		);
 	}
 
+	// Retrieving groups.
+	public void retrieveGroups(HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
+		Volley.newRequestQueue(activity).add(
+				new StringRequest(
+						Request.Method.POST,
+						Base.getBaseUrl() + "/manageGroup.php",
+						response -> {
+							try {
+								afterJsonArrayResponseIsReceived.executeAfterResponse(new JSONArray(response));
+							} catch (JSONException e) {
+								Log.e(TAG, e.toString());
+							}
+						},
+						error -> afterJsonArrayResponseIsReceived.executeAfterErrorResponse(error.toString())
+				) {
+					@Override
+					protected Map<String, String> getParams() {
+						return data;
+					}
+				}
+		);
+	}
+
 	// Retrieving messages.
 	public void retrieveMessages(HashMap<String, String> data, AfterJsonArrayResponseIsReceived afterJsonArrayResponseIsReceived) {
 		Volley.newRequestQueue(activity).add(

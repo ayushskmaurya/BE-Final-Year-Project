@@ -90,7 +90,9 @@ public class MainActivity extends AppCompatActivity {
             NavigationView navigationView = binding.navView;
 
             mAppBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.nav_chats, R.id.nav_contacts, R.id.nav_chat_without_internet, R.id.nav_spammers, R.id.nav_about_helloworld)
+                    R.id.nav_chats, R.id.nav_contacts, R.id.nav_groups,
+                    R.id.nav_chat_without_internet, R.id.nav_spammers,
+                    R.id.nav_about_helloworld)
                     .setDrawerLayout(drawer)
                     .build();
             NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
