@@ -297,6 +297,23 @@ public class DatabaseOperations {
 		);
 	}
 
+	// Creating New Group.
+	public void createGroup(HashMap<String, String> data, AfterStringResponseIsReceived afterStringResponseIsReceived) {
+		Volley.newRequestQueue(activity).add(
+				new StringRequest(
+						Request.Method.POST,
+						Base.getBaseUrl() + "/manageGroup.php",
+						response -> afterStringResponseIsReceived.executeAfterResponse(response),
+						error -> afterStringResponseIsReceived.executeAfterErrorResponse(error.toString())
+				) {
+					@Override
+					protected Map<String, String> getParams() {
+						return data;
+					}
+				}
+		);
+	}
+
 	// Stating or not stating user as spammer.
 	public void manageSpammer(HashMap<String, String> data, AfterStringResponseIsReceived afterStringResponseIsReceived) {
 		Volley.newRequestQueue(activity).add(

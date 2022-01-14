@@ -22,5 +22,28 @@
 			header('Content-Type: application/json');
 			echo json_encode($res);
 		}
+
+		// Creating group.
+		if($_POST['whatToDo'] === "createGroup") {
+			$group_name = $_POST['groupName'];
+			$members_id = $_POST['membersId'];
+
+			$stmt1 = $conn->prepare("INSERT INTO chats () VALUES ()");
+			$stmt1->execute();
+			$chatid = $conn->lastInsertId();
+
+			$sql2 = "INSERT INTO groups (chatid, name) VALUES (:chat_id, :group_name)";
+			$stmt2 = $conn->prepare($sql2);
+			$stmt2->execute(array("chat_id" => $chatid, "group_name" => $group_name));
+
+			$group_members_id = json_decode($members_id, true);
+			foreach ($group_members_id as $member_id) {
+				$sql3 = "INSERT INTO group_members (chatid, userid) VALUES (:chat_id, :member_id)";
+				$stmt3 = $conn->prepare($sql3);
+				$stmt3->execute(array("chat_id" => $chatid, "member_id" => $member_id));
+			}
+
+			echo strval("1");
+		}
 	}
 ?>

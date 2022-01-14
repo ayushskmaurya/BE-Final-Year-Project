@@ -1,6 +1,7 @@
 package com.messengerhelloworld.helloworld.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -14,10 +15,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.messengerhelloworld.helloworld.R;
+import com.messengerhelloworld.helloworld.activities.CreateGroupActivity;
 import com.messengerhelloworld.helloworld.adapters.GroupsAdapter;
 import com.messengerhelloworld.helloworld.interfaces.AfterJsonArrayResponseIsReceived;
 import com.messengerhelloworld.helloworld.utils.DatabaseOperations;
@@ -76,6 +79,10 @@ public class GroupsFragment extends Fragment {
 				showMsg.setVisibility(View.VISIBLE);
 			}
 		});
+
+		ImageView createGroup = groupsLayout.findViewById(R.id.createGroup_fragmentGroups);
+		createGroup.setOnClickListener(v ->
+				getActivity().startActivity(new Intent(getActivity(), CreateGroupActivity.class)));
 
 		return groupsLayout;
 	}

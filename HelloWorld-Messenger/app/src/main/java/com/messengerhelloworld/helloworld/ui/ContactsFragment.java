@@ -12,9 +12,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,11 +24,11 @@ import com.messengerhelloworld.helloworld.R;
 import com.messengerhelloworld.helloworld.adapters.ContactsAdapter;
 import com.messengerhelloworld.helloworld.interfaces.AfterJsonArrayResponseIsReceived;
 import com.messengerhelloworld.helloworld.utils.DatabaseOperations;
+import com.messengerhelloworld.helloworld.utils.ReadAllContacts;
 import com.messengerhelloworld.helloworld.utils.ShouldSync;
 
 import org.json.JSONArray;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ContactsFragment extends Fragment {
@@ -61,7 +59,7 @@ public class ContactsFragment extends Fragment {
 
 			SharedPreferences sp = getActivity().getSharedPreferences("HelloWorldSharedPref", Context.MODE_PRIVATE);
 			HashMap<String, String> data = new HashMap<>();
-			data.put("phone_nos", getContacts());
+			data.put("phone_nos", ReadAllContacts.getContacts(getActivity()));
 			data.put("userid", sp.getString("HelloWorldUserId", null));
 
 			DatabaseOperations databaseOperations = new DatabaseOperations((Activity) context);
@@ -73,7 +71,8 @@ public class ContactsFragment extends Fragment {
 						RecyclerView contacts = contactsLayout.findViewById(R.id.contacts_fragmentContacts);
 						contacts.setVisibility(View.VISIBLE);
 						contacts.setLayoutManager(new LinearLayoutManager(context));
-						ContactsAdapter contactsAdapter = new ContactsAdapter(context, response);
+						ContactsAdapter contactsAdapter = new ContactsAdapter(
+								context, response, null);
 						contacts.setAdapter(contactsAdapter);
 					}
 					else {
@@ -101,25 +100,5 @@ public class ContactsFragment extends Fragment {
 			showMsg.setVisibility(View.VISIBLE);
 		}
 		return contactsLayout;
-	}
-
-	private String getContacts() {
-		ArrayList<String> phoneNos = new ArrayList<>();
-		String mobNo;
-		int len;
-
-		Cursor cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-				null, null, null, null);
-		while(cursor.moveToNext()) {
-			mobNo = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-			mobNo = mobNo.replaceAll("\\D", "");
-			len = mobNo.length();
-			if(len>=10)
-				phoneNos.add("'" + mobNo.substring(len-10, len) + "'");
-		}
-
-		if(phoneNos.size() == 0)
-			phoneNos.add("''");
-		return phoneNos.toString();
 	}
 }

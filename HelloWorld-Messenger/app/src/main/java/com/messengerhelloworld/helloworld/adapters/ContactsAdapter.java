@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.messengerhelloworld.helloworld.R;
 import com.messengerhelloworld.helloworld.activities.ChatActivity;
 import com.messengerhelloworld.helloworld.activities.ViewProfileImageActivity;
+import com.messengerhelloworld.helloworld.interfaces.AddMemberToGroup;
 import com.messengerhelloworld.helloworld.utils.DisplayProfileImage;
 
 import org.json.JSONArray;
@@ -29,6 +30,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 	private static final String PROFILE_IMAGE_NAME = "com.messengerhelloworld.helloworld.profileImageName";
 	private final Context context;
 	private final JSONArray localDataSet;
+	private final AddMemberToGroup addMemberToGroup;
 	private Intent intentProfileImage;
 
 	public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -54,9 +56,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 		}
 	}
 
-	public ContactsAdapter(Context context, JSONArray dataSet) {
+	public ContactsAdapter(Context context, JSONArray dataSet, AddMemberToGroup addMemberToGroup) {
 		this.context = context;
 		localDataSet = dataSet;
+		this.addMemberToGroup = addMemberToGroup;
 		intentProfileImage = new Intent(this.context, ViewProfileImageActivity.class);
 	}
 
@@ -71,12 +74,19 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
 	public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 		viewHolder.getContact().setOnClickListener(v -> {
 			try {
-				Intent intent = new Intent(context, ChatActivity.class);
-				intent.putExtra(IS_GROUP, "no");
-				intent.putExtra(CHAT_ID, localDataSet.getJSONObject(position).getString("chatid"));
-				intent.putExtra(RECEIVER_USER_NAME, localDataSet.getJSONObject(position).getString("name"));
-				intent.putExtra(RECEIVER_USER_ID, localDataSet.getJSONObject(position).getString("userid"));
-				context.startActivity(intent);
+				if(addMemberToGroup == null) {
+					Intent intent = new Intent(context, ChatActivity.class);
+					intent.putExtra(IS_GROUP, "no");
+					intent.putExtra(CHAT_ID, localDataSet.getJSONObject(position).getString("chatid"));
+					intent.putExtra(RECEIVER_USER_NAME, localDataSet.getJSONObject(position).getString("name"));
+					intent.putExtra(RECEIVER_USER_ID, localDataSet.getJSONObject(position).getString("userid"));
+					context.startActivity(intent);
+				}
+				else {
+					addMemberToGroup.addMember(
+							localDataSet.getJSONObject(position).getString("userid"),
+							viewHolder.getContact());
+				}
 			} catch (JSONException e) {
 				Log.e(TAG, e.toString());
 			}

@@ -69,4 +69,8 @@
 
     <string name="caption">Caption</string>
     <string name="send_file">Send File</string>
+
+    <string name="group_name">Group Name</string>
+    <string name="add_members">Add Members</string>
+    <string name="create_group">Create Group</string>
 </resources>
