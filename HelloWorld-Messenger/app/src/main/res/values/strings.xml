@@ -52,7 +52,8 @@
         6. Since, all the attachments &amp; chats of the user are stored in server, user do not have to worry about taking backups.\n
         7. User can chat as well as can share large sized files with each other without the internet connectivity &amp; data charges.\n
         8. User can separate the spammers from normal chats i.e., Chats which are stated as Spammers by the user will not be populated along with the normal chats.\n
-        9. User can edit the sent message as long as the recipient has not seen it.
+        9. User can edit the sent message as long as the recipient has not seen it.\n
+        10. Groups can also be viewed separately. So, the user is able to manage &amp; see all the groups together.
     </string>
     <string name="about_info2">GitHub Repository Link:</string>
     <string name="about_info3">https://github.com/ayushskmaurya/BE-Final-Year-Project</string>

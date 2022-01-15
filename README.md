@@ -10,6 +10,7 @@ Android Chat Application for Final Year Project.
 * User can chat as well as can share large sized files with each other without the internet connectivity & data charges.
 * User can separate the spammers from normal chats i.e., Chats which are stated as Spammers by the user will not be populated along with the normal chats.
 * User can edit the sent message as long as the recipient has not seen it.
+* Groups can also be viewed separately. So, the user is able to manage & see all the groups together.
 
 #### Instructions
 1. Host the PHP and MySQL based HelloWorld Server.
