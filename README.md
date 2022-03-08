@@ -21,16 +21,16 @@ Android Chat Application for Final Year Project.
 
 4. Change `BASE_URL` as per your requirement in the `Base.java` file present in `com.messengerhelloworld.helloworld.utils` package.
 
-4. In your Android mobile, open File Manager, create `HelloWorld` folder if not created already & save a text file with name as `ipForTesting.txt`. Under this file write your hostname.
+5. For testing, open File Manager in your Android mobile, create `HelloWorld` folder if not created already & save a text file with name as `ipForTesting.txt`. Under this file write your hostname.
 
-5. Change `BASE_URL` as per your requirement in the `base.php` file.
+6. Change `BASE_URL` as per your requirement in the `base.php` file.
 
-6. Create a MySQL Database using the following command:
+7. Create a MySQL Database using the following command:
 	```
 	CREATE DATABASE helloworld;
 	```
 
-7. Create all the tables in this database using following command:
+8. Create all the tables in this database using following command:
 	```
 	-- Users Table
 	CREATE TABLE users (
