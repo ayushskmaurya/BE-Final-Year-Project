@@ -24,7 +24,6 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -43,13 +42,13 @@ import com.messengerhelloworld.helloworld.utils.DatabaseHandler;
 import com.messengerhelloworld.helloworld.utils.DisplayProfileImage;
 import com.messengerhelloworld.helloworld.utils.LastDeletedProfileImages;
 import com.messengerhelloworld.helloworld.utils.ManageFolders;
+import com.messengerhelloworld.helloworld.utils.Permissions;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -115,19 +114,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
             // Permissions
-            String[] permissionsRequired = {
-                    Manifest.permission.READ_CONTACTS,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-            };
-            ArrayList<String> permissions = new ArrayList<>();
-            for(String permission : permissionsRequired)
-                if(ContextCompat.checkSelfPermission(this,
-                        permission) != PackageManager.PERMISSION_GRANTED)
-                    permissions.add(permission);
-            if(permissions.size() > 0)
-                ActivityCompat.requestPermissions(this,
-                        permissions.toArray(new String[permissions.size()]), 1);
+            Permissions.reqPermissions(this);
 
             // Creating all the required folders.
             ManageFolders.createAllFolders();

@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.messengerhelloworld.helloworld.R;
 import com.messengerhelloworld.helloworld.interfaces.AfterJsonArrayResponseIsReceived;
 import com.messengerhelloworld.helloworld.utils.DatabaseOperations;
+import com.messengerhelloworld.helloworld.utils.Permissions;
 import com.messengerhelloworld.helloworld.utils.SHA256Hash;
 
 import org.json.JSONArray;
@@ -33,6 +34,9 @@ public class LoginActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+
+		// Permissions
+		Permissions.reqPermissions(this);
 
 		TextView mobView = findViewById(R.id.mob_activityLogin);
 		TextView pwdView = findViewById(R.id.pwd_activityLogin);
